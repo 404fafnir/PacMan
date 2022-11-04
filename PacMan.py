@@ -40,7 +40,7 @@ def hauteur(liste):
 #eil = element in list (elements dans la liste)
 
 
-def ismovable(liste, (ml, eil)):
+def ismovable(liste, ml, eil):
     if liste[ml+1][eil] != 1:
         up = True
     if liste[ml-1][eil] != 1:
@@ -59,7 +59,7 @@ def quellecase(uinp):
         res = "left"
     elif uinp == "s":
         res = "down"
-    elif uinp = "d":
+    elif uinp == "d":
         res = "right"
     return res
 
@@ -67,7 +67,7 @@ def quellecase(uinp):
 
 #Detecting if a key is pressed (ZQSD) 
 
-def moving(liste, (ml, eil), uinp):
+def moving(liste, ml, eil, uinp):
     if uinp == "up" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[0]:
         pacmanXY[0]+=1
     elif uinp == "down" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[1]:
@@ -103,16 +103,32 @@ def dessinplateau(liste):
             i += 1
 
 
+#Fonction pour mettre les bonnes valeurs de pour les cases adjacentes 
+def adjacent(liste, uinp):
+    x = pacmanXY[0]
+    y = pacmanXY[1]
+    if(quellecase(uinp) == "up"):
+        futureV = (x+1, y)
+    elif (quellecase(uinp) == "down"):
+        futureV = (x-1, y)
+    elif (quellecase(uinp) == "left"):
+        futureV = (x, y-1)
+    elif (quellecase(uinp) == "right"):
+        futureV = (x, y+1)
+    return futureV
+
+
+
 #Fonction pour detecter la mort
 def alive(liste, uinp):
     alive = True
-    if (quellecase(uinp) == "up") and (liste[pacmanXY[0]+=1][pacmanXY[1]] == 4):
+    if liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
         alive = False
-    elif (quellecase(uinp) == "down") and (liste[pacmanXY[0]-=1][pacmanXY[1]] == 4):
+    elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
         alive = False
-    elif (quellecase(uinp) == "left") and (liste[pacmanXY[0][pacmanXY[1]-=1] == 4):
+    elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
         alive = False
-    elif (quellecase(uinp) == "right") and (liste[pacmanXY[0][pacmanXY[1]+=1] == 4):
+    elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
         alive = False
     return alive
 
@@ -130,7 +146,13 @@ def end (cp, mp):
 #Main Fonction
 
 def PacMan(liste):
+    alive = True
+    end = False
     while alive or (not end):
+        subpcs.run("clear")
+        uinp = input()
+
+        
 
 
 
