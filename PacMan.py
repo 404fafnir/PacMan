@@ -106,17 +106,26 @@ def dessinplateau(liste):
 #Fonction pour detecter la mort
 def alive(liste, uinp):
     alive = True
-    if quellecase(uinp) == "up" and liste[pacmanXY[0]+=1][pacmanXY[1]] == 4:
+    if (quellecase(uinp) == "up") and (liste[pacmanXY[0]+=1][pacmanXY[1]] == 4):
         alive = False
-    if quellecase(uinp) == "down" and liste[pacmanXY[0]-=1][pacmanXY[1]] == 4:
+    elif (quellecase(uinp) == "down") and (liste[pacmanXY[0]-=1][pacmanXY[1]] == 4):
         alive = False
-    if quellecase(uinp) == "left" and liste[pacmanXY[0][pacmanXY[1]-=1] == 4:
+    elif (quellecase(uinp) == "left") and (liste[pacmanXY[0][pacmanXY[1]-=1] == 4):
         alive = False
-    if quellecase(uinp) == "right" and liste[pacmanXY[0][pacmanXY[1]+=1] == 4:
+    elif (quellecase(uinp) == "right") and (liste[pacmanXY[0][pacmanXY[1]+=1] == 4):
         alive = False
     return alive
 
 
+
+
+#Fonction pour savoir si le joueur a gagné la partie
+#cp === Current Points, mp === Maximum achievable Points
+def end (cp, mp):
+    result = False
+    if cp == mp:
+        result = True
+    return result
 
 #Main Fonction
 
