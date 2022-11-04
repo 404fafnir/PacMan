@@ -67,7 +67,7 @@ def quellecase(uinp):
 
 #Detecting if a key is pressed (ZQSD) 
 
-def moving(liste, ml, eil, uinp):
+def moving(liste, uinp):
     if uinp == "up" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[0]:
         pacmanXY[0]+=1
     elif uinp == "down" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[1]:
@@ -121,16 +121,16 @@ def adjacent(liste, uinp):
 
 #Fonction pour detecter la mort
 def alive(liste, uinp):
-    alive = True
+    vie = True
     if liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
-        alive = False
+        vie = False
     elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
-        alive = False
+        vie = False
     elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
-        alive = False
+        vie = False
     elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
-        alive = False
-    return alive
+        vie = False
+    return vie
 
 
 
@@ -146,11 +146,16 @@ def end (cp, mp):
 #Main Fonction
 
 def PacMan(liste):
-    alive = True
-    end = False
-    while alive or (not end):
+    envie = True
+    fin = False
+    while envie or (not fin):
         subpcs.run("clear")
         uinp = input()
+        envie = alive(liste, uinp)
+        fin = end(cp, mp)
+        dessinplateau(liste)
+        moving(liste, uinp)
+
 
         
 
