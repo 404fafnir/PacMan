@@ -22,9 +22,11 @@ pacmanXY = (5,4)
 
 
 
-#PacMan o 
-#Points *
-#Fantomes #
+#PacMan o === 2
+#Points * === 3
+#Fantomes # === 4
+#Cases Vides === 5
+#Teleporteurs === 6
 
 def longeur(liste):
     return (len(liste[0])-1)
@@ -75,6 +77,30 @@ def moving(liste, (ml, eil), uinp):
     elif uinp == "left" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[3]:
         pacmanXY[1]-=1
 
+
+#Dessin du playground
+def dessinplateau(liste):
+    i = 0
+    j = 0
+    while i < hauteur:
+        while j < longeur:
+            print(Back.BLACK, Fore.WHITE)
+            if liste[i][j] == 1:
+                print(Back.RED)
+                j += 1
+            elif liste[i][j] == 2:
+                print(Fore.YELLOW + "o")
+                j += 1
+            elif liste[i][j] == 3:
+                print(Fore.GREEN + "*")
+                j += 1
+            elif liste[i][j] == 4:
+                print(Fore.RED + "#")
+                j += 1
+            elif (liste[i][j] == 5) or (liste[i][j] == 6):
+                print(" ")
+                j += 1
+            i += 1
 
 
 
