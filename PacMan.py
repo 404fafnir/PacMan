@@ -66,13 +66,13 @@ def quellecase(uinp):
 #Detecting if a key is pressed (ZQSD) 
 
 def moving(liste, (ml, eil), uinp):
-    if (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[0]:
+    if uinp == "up" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[0]:
         pacmanXY[0]+=1
-    elif (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[1]:
+    elif uinp == "down" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[1]:
         pacmanXY[0]-=1
-    elif (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[2]:
+    elif uinp == "right" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[2]:
         pacmanXY[1]+=1
-    elif (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[3]:
+    elif uinp == "left" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[3]:
         pacmanXY[1]-=1
 
 
