@@ -18,6 +18,10 @@ plateau = [[1,1,1,1,1,1,1,1,1,1,1,1],
 
 
 
+pacmanXY = (5,4)
+
+
+
 #PacMan o 
 #Points *
 #Fantomes #
@@ -34,16 +38,42 @@ def hauteur(liste):
 #eil = element in list (elements dans la liste)
 
 
-def movable(liste, (ml,eil)):
-    if liste[ml+1][eil] == 1:
-        up = False
-    if liste[ml-1][eil] == 1:
-        down = False
-    if liste[ml][eil+1] == 1:
-        right = False
-    if liste[ml][eil-1] == 1:
-        left = False
+def ismovable(liste, (ml, eil)):
+    if liste[ml+1][eil] != 1:
+        up = True
+    if liste[ml-1][eil] != 1:
+        down = True
+    if liste[ml][eil+1] != 1:
+        right = True
+    if liste[ml][eil-1] != 1:
+        left = True
     return (up, down, right, left)
+
+#Converting keys to values
+def quellecase(uinp):
+    if uinp == "z":
+        res = "up"
+    elif uinp == "q":
+        res = "left"
+    elif uinp == "s":
+        res = "down"
+    elif uinp = "d":
+        res = "right"
+    return res
+
+
+
+#Detecting if a key is pressed (ZQSD) 
+
+def moving(liste, (ml, eil), uinp):
+    if (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[0]:
+        pacmanXY[0]+=1
+    elif (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[1]:
+        pacmanXY[0]-=1
+    elif (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[2]:
+        pacmanXY[1]+=1
+    elif (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[3]:
+        pacmanXY[1]-=1
 
 
 
