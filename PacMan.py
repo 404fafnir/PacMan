@@ -1,14 +1,18 @@
 #PACMAN LEZGO
 import subprocess as subpcs
-from colorama import Fore, Back
 import pygame
+from pygame.locals import *
+
+
+
+pygame.init()
 
 plateau = [[1,1,1,1,1,1,1,1,1,1,1,1],
-           [1,0,0,0,0,0,0,0,0,0,0,1],
+           [1,2,0,0,0,0,0,0,0,0,0,1],
            [1,0,1,1,1,1,0,1,1,1,0,1],
            [1,0,1,0,0,0,0,0,0,1,0,1],
            [1,0,0,0,1,0,1,1,0,0,0,1],
-           [1,1,1,1,0,0,2,0,1,1,0,1],
+           [1,1,1,1,0,0,0,0,1,1,0,1],
            [5,0,0,0,0,1,1,0,0,1,0,5],
            [1,1,0,1,1,0,0,1,0,0,0,1],
            [1,0,0,1,0,0,0,0,0,0,1,1],
@@ -18,11 +22,6 @@ plateau = [[1,1,1,1,1,1,1,1,1,1,1,1],
           
 
 
-
-pacmanXY = (5,4)
-
-
-pygame.init()
 #Cases Vides === 0
 #Murs @ === 1
 #PacMan o === 2
@@ -38,21 +37,21 @@ def hauteur(liste):
 
 
 #Check if PacMan can move in a certain direction
-#ml = main list (liste principale qui contient elle même des listes)
-#eil = element in list (elements dans la liste)
+#x = main list (liste principale qui contient elle même des listes)
+#y = element in list (elements dans la liste)
 
 
-def ismovable(liste, ml, eil):
-    if liste[ml+1][eil] != 1:
-        up = True
-    if liste[ml-1][eil] != 1:
-        down = True
-    if liste[ml][eil+1] != 1:
-        right = True
-    if liste[ml][eil-1] != 1:
-        left = True
+def ismovable(liste, x, y):
+    if liste[x+1][y] == 1:
+        up = False
+    if liste[x-1][y] == 1:
+        down = False
+    if liste[x][y+1] == 1:
+        right = False
+    if liste[x][y-1] == 1:
+        left = False
     return (up, down, right, left)
-
+'''
 #Converting keys to values
 def quellecase(uinp):
     if uinp == "z":
@@ -64,20 +63,29 @@ def quellecase(uinp):
     elif uinp == "d":
         res = "right"
     return res
+'''
 
 
+#Detecting if a key is pressed and modify the list 
 
-#Detecting if a key is pressed (ZQSD) 
-
-def moving(liste, uinp):
-    if uinp == "up" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[0]:
-        pacmanXY[0]+=1
-    elif uinp == "down" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[1]:
-        pacmanXY[0]-=1
-    elif uinp == "right" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[2]:
-        pacmanXY[1]+=1
-    elif uinp == "left" and (ismovable(liste, (pacmanXY[0], pacmanXY[1])))[3]:
-        pacmanXY[1]-=1
+def moving(liste, uinp, x, y):
+    if uinp == "up" and (ismovable(liste, x, y))[0]:
+        liste[x][y] = 0
+        x+=1
+        liste[x][y] = 2
+    elif uinp == "down" and (ismovable(liste, (x, y)))[1]:
+        liste[x][y] = 0
+        x-=1
+        liste[x][y] = 2
+    elif uinp == "right" and (ismovable(liste, (x, y)))[2]:
+        liste[x][y] = 0
+        y+=1
+        liste[x][y[1]] = 2
+    elif uinp == "left" and (ismovable(liste, (x, y)))[3]:
+        liste[x][y] = 0
+        y-=1
+        liste[x][y] = 2
+    return x, y
 
 
 
@@ -87,9 +95,7 @@ def moving(liste, uinp):
 #Dessin du playground
 def dessinplateau(liste):
     for j in range(len(liste)):
-        #print(Back.BLACK, Fore.WHITE)
         for k in range(len(liste[0])):
-            #print(Back.BLACK, Fore.WHITE, end = "")
             if liste[j][k] == 1:
                 print("@",  end = "")
             elif liste[j][k] == 2:
@@ -102,25 +108,10 @@ def dessinplateau(liste):
                 print(" ", end = "")
         print()
 
-'''
-def on_press(uinp):
-    if uinp == "z":
-        res = "up"
-    elif uinp == "q":
-        res = "left"
-    elif uinp == "s":
-        res = "down"
-    elif uinp == "d":
-        res = "right"
-    else:
-        res = ""
-    return res
-'''
 
-#Fonction pour mettre les bonnes valeurs de pour les cases adjacentes 
-def adjacent(liste, uinp):
-    x = pacmanXY[0]
-    y = pacmanXY[1]
+
+#Fonction pour savoir la valeurs des cases autours 
+def adjacent(liste, uinp, x, y):
     futureV = (x, y)
     if uinp == "up":
         futureV = (x+1, y)
@@ -135,15 +126,15 @@ def adjacent(liste, uinp):
 
 
 #Fonction pour detecter la mort
-def alive(liste, uinp):
+def alive(liste, x, y):
     vie = True
-    if liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
+    if liste[x+1][y] == 4:
         vie = False
-    elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
+    elif liste[x-1][y] == 4:
         vie = False
-    elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
+    elif liste[x][y-1] == 4:
         vie = False
-    elif liste[adjacent(liste, uinp)[0]][adjacent(liste, uinp)[1]] == 4:
+    elif liste[x][y+1] == 4:
         vie = False
     return vie
 
@@ -163,28 +154,29 @@ def end (cp, mp):
 def PacMan(liste):
     envie = True
     fin = False
-    uinp = ""
+    x = 1
+    y = 1
     while envie or (not fin):
         subpcs.run("clear")
-        for i in pygame.event.get():
-            if i.type == pygame.KEYDOWN:
-                if i.type == pygame.K_UP:
-                    uinp = "up"
-                elif i.type == pygame.K_DOWN:
-                    uinp = "down"
-                elif i.type == pygame.K_LEFT:
-                    uinp = "left"
-                elif i.type == pygame.K_RIGHT:
-                    uinp = "right"
-                else:
-                    pass
-            else:
+        dessinplateau(liste)
+        print(x, y)
+        for event in pygame.event.get():
+            if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_z):
+                moving(liste, "up", x, y)
+            elif (event.type == pygame.KEYDOWN) and (event.key == pygame.K_s):
+                moving(liste, "down", x, y)
+            elif (event.type == pygame.KEYDOWN) and (event.key == pygame.K_q):
+                moving(liste, "left",x ,y)
+            elif (event.type == pygame.KEYDOWN) and (event.key == pygame.K_d):
+                moving(liste, "right",x , y)
+            if event.type == pygame.KEYUP:
                 pass
 
-        envie = alive(liste, uinp)
+
+        envie = alive(liste, x, y)
         #fin = end(cp, mp)
-        dessinplateau(liste)
-        moving(liste, uinp)
+        #moving(liste, uinp)
+
 
 
 PacMan(plateau)
