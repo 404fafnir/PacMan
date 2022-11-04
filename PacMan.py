@@ -103,5 +103,27 @@ def dessinplateau(liste):
             i += 1
 
 
+#Fonction pour detecter la mort
+def alive(liste, uinp):
+    alive = True
+    if quellecase(uinp) == "up" and liste[pacmanXY[0]+=1][pacmanXY[1]] == 4:
+        alive = False
+    if quellecase(uinp) == "down" and liste[pacmanXY[0]-=1][pacmanXY[1]] == 4:
+        alive = False
+    if quellecase(uinp) == "left" and liste[pacmanXY[0][pacmanXY[1]-=1] == 4:
+        alive = False
+    if quellecase(uinp) == "right" and liste[pacmanXY[0][pacmanXY[1]+=1] == 4:
+        alive = False
+    return alive
+
+
+
+#Main Fonction
+
+def PacMan(liste):
+    while alive or (not end):
+
+
+
 
 
