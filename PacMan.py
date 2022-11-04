@@ -1,14 +1,15 @@
 #PACMAN LEZGO
 import subprocess as subpcs
 from colorama import Fore, Back
+import pygame
 
 plateau = [[1,1,1,1,1,1,1,1,1,1,1,1],
            [1,0,0,0,0,0,0,0,0,0,0,1],
            [1,0,1,1,1,1,0,1,1,1,0,1],
            [1,0,1,0,0,0,0,0,0,1,0,1],
            [1,0,0,0,1,0,1,1,0,0,0,1],
-           [1,1,1,1,0,0,0,0,1,1,0,1],
-           [0,0,0,0,0,1,1,0,0,1,0,0],
+           [1,1,1,1,0,0,2,0,1,1,0,1],
+           [5,0,0,0,0,1,1,0,0,1,0,5],
            [1,1,0,1,1,0,0,1,0,0,0,1],
            [1,0,0,1,0,0,0,0,0,0,1,1],
            [1,0,1,0,0,0,1,1,0,0,1,1],
@@ -21,12 +22,13 @@ plateau = [[1,1,1,1,1,1,1,1,1,1,1,1],
 pacmanXY = (5,4)
 
 
-
+pygame.init()
+#Cases Vides === 0
+#Murs @ === 1
 #PacMan o === 2
 #Points * === 3
 #Fantomes # === 4
-#Cases Vides === 5
-#Teleporteurs === 6
+#Teleporteurs === 5
 
 def longeur(liste):
     return (len(liste[0])-1)
@@ -78,42 +80,55 @@ def moving(liste, uinp):
         pacmanXY[1]-=1
 
 
+
+
+
+
 #Dessin du playground
 def dessinplateau(liste):
-    i = 0
-    j = 0
-    while i < hauteur:
-        while j < longeur:
-            print(Back.BLACK, Fore.WHITE)
-            if liste[i][j] == 1:
-                print(Back.RED)
-                j += 1
-            elif liste[i][j] == 2:
-                print(Fore.YELLOW + "o")
-                j += 1
-            elif liste[i][j] == 3:
-                print(Fore.GREEN + "*")
-                j += 1
-            elif liste[i][j] == 4:
-                print(Fore.RED + "#")
-                j += 1
-            elif (liste[i][j] == 5) or (liste[i][j] == 6):
-                print(" ")
-                j += 1
-            i += 1
+    for j in range(len(liste)):
+        #print(Back.BLACK, Fore.WHITE)
+        for k in range(len(liste[0])):
+            #print(Back.BLACK, Fore.WHITE, end = "")
+            if liste[j][k] == 1:
+                print("@",  end = "")
+            elif liste[j][k] == 2:
+                print("o", end = "")
+            elif liste[j][k] == 3:
+                print("*", end = "")
+            elif liste[j][k] == 4:
+                print("#", end = "")
+            elif (liste[j][k] == 0) or (liste[j][k] == 5):
+                print(" ", end = "")
+        print()
 
+'''
+def on_press(uinp):
+    if uinp == "z":
+        res = "up"
+    elif uinp == "q":
+        res = "left"
+    elif uinp == "s":
+        res = "down"
+    elif uinp == "d":
+        res = "right"
+    else:
+        res = ""
+    return res
+'''
 
 #Fonction pour mettre les bonnes valeurs de pour les cases adjacentes 
 def adjacent(liste, uinp):
     x = pacmanXY[0]
     y = pacmanXY[1]
-    if(quellecase(uinp) == "up"):
+    futureV = (x, y)
+    if uinp == "up":
         futureV = (x+1, y)
-    elif (quellecase(uinp) == "down"):
+    elif uinp == "down":
         futureV = (x-1, y)
-    elif (quellecase(uinp) == "left"):
+    elif uinp == "left":
         futureV = (x, y-1)
-    elif (quellecase(uinp) == "right"):
+    elif uinp == "right":
         futureV = (x, y+1)
     return futureV
 
@@ -148,13 +163,33 @@ def end (cp, mp):
 def PacMan(liste):
     envie = True
     fin = False
+    uinp = ""
     while envie or (not fin):
         subpcs.run("clear")
-        uinp = input()
+        for i in pygame.event.get():
+            if i.type == pygame.KEYDOWN:
+                if i.type == pygame.K_UP:
+                    uinp = "up"
+                elif i.type == pygame.K_DOWN:
+                    uinp = "down"
+                elif i.type == pygame.K_LEFT:
+                    uinp = "left"
+                elif i.type == pygame.K_RIGHT:
+                    uinp = "right"
+                else:
+                    pass
+            else:
+                pass
+
         envie = alive(liste, uinp)
-        fin = end(cp, mp)
+        #fin = end(cp, mp)
         dessinplateau(liste)
         moving(liste, uinp)
+
+
+PacMan(plateau)
+
+
 
 
         
