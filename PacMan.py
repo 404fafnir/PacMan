@@ -1,11 +1,9 @@
 #PACMAN LEZGO
 import subprocess as subpcs
-import pygame
-from pygame.locals import *
+import curses
 
 
-
-pygame.init()
+stdscr = curses.initscr()
 
 plateau = [[1,1,1,1,1,1,1,1,1,1,1,1],
            [1,2,0,0,0,0,0,0,0,0,0,1],
@@ -51,6 +49,7 @@ def ismovable(liste, x, y):
     if liste[x][y-1] == 1:
         left = False
     return (up, down, right, left)
+
 '''
 #Converting keys to values
 def quellecase(uinp):
@@ -73,15 +72,15 @@ def moving(liste, uinp, x, y):
         liste[x][y] = 0
         x+=1
         liste[x][y] = 2
-    elif uinp == "down" and (ismovable(liste, (x, y)))[1]:
+    elif uinp == "down" and (ismovable(liste, x, y))[1]:
         liste[x][y] = 0
         x-=1
         liste[x][y] = 2
-    elif uinp == "right" and (ismovable(liste, (x, y)))[2]:
+    elif uinp == "right" and (ismovable(liste, x, y))[2]:
         liste[x][y] = 0
         y+=1
         liste[x][y[1]] = 2
-    elif uinp == "left" and (ismovable(liste, (x, y)))[3]:
+    elif uinp == "left" and (ismovable(liste, x, y))[3]:
         liste[x][y] = 0
         y-=1
         liste[x][y] = 2
@@ -97,16 +96,16 @@ def dessinplateau(liste):
     for j in range(len(liste)):
         for k in range(len(liste[0])):
             if liste[j][k] == 1:
-                print("@",  end = "")
+                stdscr.addstr("@")
             elif liste[j][k] == 2:
-                print("o", end = "")
+                stdscr.addstr("o")
             elif liste[j][k] == 3:
-                print("*", end = "")
+                stdscr.addstr("*")
             elif liste[j][k] == 4:
-                print("#", end = "")
+                stdscr.addstr("#")
             elif (liste[j][k] == 0) or (liste[j][k] == 5):
-                print(" ", end = "")
-        print()
+                stdscr.addstr(" ")
+        stdscr.addstr("\n")
 
 
 
@@ -152,31 +151,32 @@ def end (cp, mp):
 #Main Fonction
 
 def PacMan(liste):
+    
+    curses.noecho()
     envie = True
     fin = False
     x = 1
     y = 1
+
     while envie or (not fin):
-        subpcs.run("clear")
+        
         dessinplateau(liste)
-        print(x, y)
-        for event in pygame.event.get():
-            if (event.type == pygame.KEYDOWN) and (event.key == pygame.K_z):
-                moving(liste, "up", x, y)
-            elif (event.type == pygame.KEYDOWN) and (event.key == pygame.K_s):
-                moving(liste, "down", x, y)
-            elif (event.type == pygame.KEYDOWN) and (event.key == pygame.K_q):
-                moving(liste, "left",x ,y)
-            elif (event.type == pygame.KEYDOWN) and (event.key == pygame.K_d):
-                moving(liste, "right",x , y)
-            if event.type == pygame.KEYUP:
-                pass
-
-
+            
+        c = stdscr.getch()
+    
+        if (c == ord('z') or c == curses.KEY_UP):
+            moving(liste, "up", x, y)
+        elif (c == ord('s') or c == curses.KEY_DOWN):
+            moving(liste, "down", x, y)
+        elif (c == ord('q') or c == curses.KEY_LEFT):
+            moving(liste, "left", x , y)
+        elif (c == ord('d') or c == curses.KEY_RIGHT):
+            moving(liste, "right", x, y)
+        stdscr.refresh()
         envie = alive(liste, x, y)
         #fin = end(cp, mp)
-        #moving(liste, uinp)
-
+        
+    curses.endwin()
 
 
 PacMan(plateau)
